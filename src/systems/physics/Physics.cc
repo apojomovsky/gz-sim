@@ -4323,6 +4323,7 @@ void PhysicsPrivate::UpdateRayIntersections(EntityComponentManager &_ecm)
   {
     using BatchWorld = physics::World3d<BatchRayIntersectionFeatureList>;
     using RayQuery = BatchWorld::RayQuery;
+    using RayIntersection = BatchWorld::RayIntersection;
 
     _ecm.Each<components::RaycastData,
               components::Pose>(
@@ -4355,9 +4356,9 @@ void PhysicsPrivate::UpdateRayIntersections(EntityComponentManager &_ecm)
             batchInput.push_back(q);
           }
 
-          const auto batchOutput =
-            worldBatchRayFeature->GetBatchRayIntersectionFromLastStep(
-              batchInput);
+          std::vector<RayIntersection> batchOutput;
+          worldBatchRayFeature->GetBatchRayIntersectionFromLastStep(
+            batchInput, batchOutput);
 
           for (const auto &hit : batchOutput)
           {
